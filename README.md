@@ -5,8 +5,8 @@
 ## Project Introduction
 
 -   This project is version 2.0 of [RoyaleAnalyze](https://github.com/Arshtyi/RoyaleAnalyze), implemented using the official [Clash Royale API](https://developer.clashroyale.com/#/). The previous version relied on [RoyaleAPI](https://royaleapi.com/), which has unfortunately discontinued its maintenance.
--   Latest version: V0.0.3 (Last updated: April 10, 2025)
--   Built with [JDK 21](https://www.oracle.com/cn/java/technologies/downloads/#java21)
+-   Latest version: V0.0.4 (Last updated: April 18, 2025)
+-   Built with [JDK 21](https://www.oracle.com/java/technologies/downloads/#java21)
 -   Project structure: Maven
 -   Dependencies are listed in [pom.xml](https://github.com/Arshtyi/RoyaleAnalyze-2.0/blob/main/pom.xml)
 -   Note: Due to architectural considerations, there will likely be no official Releases published
@@ -25,7 +25,7 @@
 
 ### Prerequisites
 
--   [JDK 23](https://www.oracle.com/cn/java/technologies/downloads/#java23): Verify your JDK version with:
+-   [JDK 21](https://www.oracle.com/java/technologies/downloads/#java21): Verify your JDK version with:
     ```
     java --version
     ```
