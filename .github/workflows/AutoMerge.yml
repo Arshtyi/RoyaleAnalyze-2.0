@@ -1,0 +1,105 @@
+name: Auto Merge Version Commits
+
+on:
+    push:
+        branches:
+            - develop
+
+jobs:
+    auto-merge:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+
+        steps:
+            # 认证问题修复：使用默认的GITHUB_TOKEN进行初始检出
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  token: ${{ github.token }}
+
+            - name: Check commit message for version pattern
+              id: check_version
+              run: |
+                  COMMIT_MSG=$(git log -1 --pretty=%B)
+                  if [[ $COMMIT_MSG =~ ^V([0-9]|[1-9][0-9]|100)\.([0-9]|[1-9][0-9]|100)\.([0-9]|[1-9][0-9]|100)$ ]]; then
+                    echo "检测到版本提交: $COMMIT_MSG"
+                    echo "is_version=true" >> $GITHUB_OUTPUT
+                    echo "version=$COMMIT_MSG" >> $GITHUB_OUTPUT
+                  else
+                    echo "非版本提交，跳过处理: $COMMIT_MSG"
+                    echo "is_version=false" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Exit if not a version commit
+              if: steps.check_version.outputs.is_version != 'true'
+              run: |
+                  echo "提交信息不符合版本号格式，工作流正常结束"
+                  exit 0
+
+            # 使用GitHub提供的API创建和合并PR
+            - name: Create and Merge PR
+              if: steps.check_version.outputs.is_version == 'true'
+              uses: actions/github-script@v7
+              with:
+                  github-token: ${{ secrets.AUTOMERGE }}
+                  script: |
+                      const version = '${{ steps.check_version.outputs.version }}';
+
+                      try {
+                        // 创建一个Pull Request
+                        console.log(`创建从develop到main分支的PR，版本: ${version}`);
+                        const pr = await github.rest.pulls.create({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          title: `合并版本 ${version} 到main分支`,
+                          body: `自动从develop分支合并版本 ${version} 到main分支`,
+                          head: 'develop',
+                          base: 'main'
+                        });
+                        
+                        const prNumber = pr.data.number;
+                        console.log(`成功创建PR #${prNumber}`);
+                        
+                        // 尝试合并PR
+                        console.log(`正在合并PR #${prNumber}`);
+                        try {
+                          await github.rest.pulls.merge({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            pull_number: prNumber,
+                            merge_method: 'merge'
+                          });
+                          console.log(`PR #${prNumber} 已成功合并`);
+                        } catch (error) {
+                          console.log(`PR合并失败: ${error.message}，尝试使用直接推送方法`);
+                          
+                          // 在这里，我们使用单独的步骤进行强制推送
+                          throw new Error('PR无法合并，将通过强制推送步骤继续');
+                        }
+                      } catch (error) {
+                        console.error(`操作失败: ${error.message}`);
+                        core.setFailed(error.message);
+                      }
+
+            # 添加一个单独的步骤处理强制推送情况
+            - name: Force push if PR fails
+              if: steps.check_version.outputs.is_version == 'true' && failure()
+              run: |
+                  # 设置认证
+                  git config --global user.name "GitHub Actions"
+                  git config --global user.email "actions@github.com"
+
+                  # 创建临时认证帮助器
+                  echo "https://${{ secrets.AUTOMERGE }}@github.com" > ~/.git-credentials
+                  git config --global credential.helper store
+
+                  # 执行强制推送
+                  git fetch origin main
+                  git checkout main
+                  git reset --hard origin/develop
+                  git push --force origin main
+
+                  echo "已通过强制推送方式将develop合并到main"
