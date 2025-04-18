@@ -56,8 +56,8 @@
 -   Added marked columns feature
 -   Modified some text content in the project
 
-## [V0.0.4] - 2025 - 04 -18
+## [V0.0.4] - 2025-04-18
 
 ### Changes
 
--   Turn to use JDK21(Because JDK23 is not LTS).
+-   Switch to using JDK 21 (Because JDK 23 is not LTS).
