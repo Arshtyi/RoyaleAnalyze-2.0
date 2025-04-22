@@ -61,3 +61,9 @@
 ### Changes
 
 -   Switch to using JDK 21 (Because JDK 23 is not LTS).
+
+## [V0.0.5] - 2025-04-22
+
+### Changes
+
+-   Modified the storage method of `APIKEY.pem`.

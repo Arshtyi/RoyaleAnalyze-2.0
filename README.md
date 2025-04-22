@@ -5,7 +5,7 @@
 ## Project Introduction
 
 -   This project is version 2.0 of [RoyaleAnalyze](https://github.com/Arshtyi/RoyaleAnalyze), implemented using the official [Clash Royale API](https://developer.clashroyale.com/#/). The previous version relied on [RoyaleAPI](https://royaleapi.com/), which has unfortunately discontinued its maintenance.
--   Latest version: V0.0.4 (Last updated: April 18, 2025)
+-   Latest version: V0.0.5 (Last updated: April 22, 2025)
 -   Built with [JDK 21](https://www.oracle.com/java/technologies/downloads/#java21)
 -   Project structure: Maven
 -   Dependencies are listed in [pom.xml](https://github.com/Arshtyi/RoyaleAnalyze-2.0/blob/main/pom.xml)
@@ -18,6 +18,7 @@
 -   The [Clash Royale API](https://developer.clashroyale.com/#/) enforces strict request validation and does not allow disguised requests. Therefore:
     -   The project stores the API key in an external file
     -   You must apply for your own API key and replace the content in the `APIKEY.pem` file
+    -   The storage method of `APIKEY.pem` has been modified since V0.0.5. Please refer to the latest documentation if you encounter issues.
     -   Advanced users may also want to update the relevant configurations in the `Urls` class
 -   Warning: Do not run this application as a JAR file, as it will encounter path resolution errors.
 

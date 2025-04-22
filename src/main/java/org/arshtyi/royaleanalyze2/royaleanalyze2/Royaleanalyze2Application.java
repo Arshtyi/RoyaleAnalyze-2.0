@@ -12,8 +12,8 @@
  * @dependencies Spring Boot, JDK 21, Maven, and other libraries listed in pom.xml
  * @api Clash Royale API (https://developer.clashroyale.com/#/)
  * @startDate 2024/02/06
- * @completionDate 2024/04/10
- * @version 0.0.3
+ * @completionDate 2024/04/22
+ * @version 0.0.5
  * @license Apache License 2.0 (https://github.com/Arshtyi/RoyaleAnalyze-2.0/blob/main/LICENSE)
  * @documentation Please refer to README.md in the project root directory
  * @changeLog Please refer to CHANGELOG.md in the project root directory
@@ -25,7 +25,7 @@
  * For ideas, suggestions, or bug reports, please contact the author using the provided contact information.
  * 
  * By Arshtyi
- * On 2024/04/10
+ * On 2024/04/22
  */
 package org.arshtyi.royaleanalyze2.royaleanalyze2;
 
