@@ -41,3 +41,5 @@ temp/
 
 ## .clang-format file
 .clang-format
+
+src/main/resources/config/APIKEY.pem
